@@ -1,10 +1,14 @@
 import './App.css';
 import BQuestionsList from './components/BQuestionsList';
+import {Route, Routes} from "react-router-dom";
+
 
 function App() {
   return (
     <div className="App">
-      <BQuestionsList />
+      <Routes>
+        <Route strict exact path="/" element={<BQuestionsList/>}/>
+      </Routes>
     </div>
   );
 }
