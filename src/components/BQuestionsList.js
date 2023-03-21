@@ -1,21 +1,9 @@
 import React from 'react';
-import { useQuery, gql } from "@apollo/client"
-
-const GET_BQUESTIONS = gql `
-query {
-  bQuestions {
-    id 
-    question
-  }
-}
-`;
+import { useBQuestions } from '../hooks/useBQuestions';
 
 export default function BQuestionsList(){
   
-  const {error, data, loading} = useQuery(GET_BQUESTIONS);
-
-  console.log({error, loading, data});
-  
+  const {error, loading, data} = useBQuestions();
 
   if (loading) return <div>Loading....</div>;
   if (error) return <div>Error, something went wrong!</div>;
