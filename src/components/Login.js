@@ -4,39 +4,46 @@ import { useNavigate } from 'react-router-dom';
 import '../index.css';
 import '../App.css';
 import { useQuery, gql, useMutation } from "@apollo/client"
-import { AUTH_TOKEN } from '../constants';
+// import { AUTH_TOKEN } from '../constants';
 
 const SIGNUP_MUTATION = gql`
-mutation {
-  createUser(input:{
-    name: String,
-    authProvider: {
-      credentials: {
-        email: String,
-        password: String
-      }
-    }}
-  ) {
-    name
-    email
-  }
+mutation SignupMutation ($name: String!, $email: String!, $password: String!)
+{
+  createUser(input: {
+    name: $name,
+    email: $email,
+    password: $password 
+    }
+){
+    user {
+        name 
+        email 
+        passwordDigest
+        
+    }
+}
 }
 `;
+export {SIGNUP_MUTATION};
 
 const LOGIN_MUTATION = gql`
-mutation {
+mutation LoginMutation($email: String!, $password: String!)
+{
   signinUser(input:{credentials: {
-    email: String,
-    password: String
+    email: $email,
+    password: $password
   }}){
-    token
+    
     user {
       id
+      name
+      passwordDigest
     }
   }
 }
 
-`
+`;
+export {LOGIN_MUTATION};
 
 
 
@@ -62,7 +69,6 @@ export default function Login() {
       password: formState.password
     },
     onCompleted: ({ login }) => {
-      localStorage.setItem(AUTH_TOKEN, login.token);
       navigate('/bquestions');
     }
   });
@@ -74,7 +80,6 @@ export default function Login() {
       password: formState.password
     },
     onCompleted: ({ signup }) => {
-      localStorage.setItem(AUTH_TOKEN, signup.token);
       navigate('/bquestions');
     }
   })
@@ -154,11 +159,6 @@ export default function Login() {
         </button>
         </div>
 
-          {/* <button className='border w-full my-5 py-2 bg-indigo-500 hover:bg-indigo-400 text-white'>Sign In</button>
-          <div className='flex justify-between'>
-            <p className='flex items-center' ><input className='mr-2' type="checkbox"/>Remember Me</p>
-            <p>Create an Account</p>
-          </div> */}
         </div>
       </div>
     </div>
